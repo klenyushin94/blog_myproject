@@ -32,7 +32,7 @@ class PaginatorViewsTest(TestCase):
         cls.authorized_author = Client()
         cls.authorized_client.force_login(PaginatorViewsTest.user)
         cls.authorized_author.force_login(PaginatorViewsTest.author)
-    
+
     def setUp(self):
         cache.clear()
 
