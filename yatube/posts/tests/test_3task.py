@@ -47,12 +47,11 @@ class PostURLTest(TestCase):
     def test_post_in_index(self):
         """Тестовый пост попал на страницу index."""
         response = self.authorized_client.get(reverse('posts:index'))
-        i = 0
-        for i in range(len(response.context['page_obj'])):
-            first_object = response.context['page_obj'][i]
-            text = first_object.text
-            if text == PostURLTest.post.text:
-                self.assertEqual(text, PostURLTest.post.text)
+        first_object = response.context['page_obj'][0]
+        text = first_object.text
+        author = first_object.author
+        self.assertEqual(text, PostURLTest.post.text)
+        self.assertEqual(author, PostURLTest.post.author)
 
     def test_post_in_group_list(self):
         """Тестовый пост попал на указанную group_list."""
@@ -60,12 +59,11 @@ class PostURLTest(TestCase):
             'posts:group_list',
             kwargs={'slug': 'test-slug'}
         ))
-        i = 0
-        for i in range(len(response.context['page_obj'])):
-            first_object = response.context['page_obj'][i]
-            text = first_object.text
-            if text == PostURLTest.post.text:
-                self.assertEqual(text, PostURLTest.post.text)
+        first_object = response.context['page_obj'][0]
+        text = first_object.text
+        author = first_object.author
+        self.assertEqual(text, PostURLTest.post.text)
+        self.assertEqual(author, PostURLTest.post.author)
 
     def test_post_in_profile(self):
         """Тестовый пост попал на указанную profile."""
@@ -73,12 +71,11 @@ class PostURLTest(TestCase):
             'posts:profile',
             kwargs={'username': 'author'}
         ))
-        i = 0
-        for i in range(len(response.context['page_obj'])):
-            first_object = response.context['page_obj'][i]
-            text = first_object.text
-            if text == PostURLTest.post.text:
-                self.assertEqual(text, PostURLTest.post.text)
+        first_object = response.context['page_obj'][0]
+        text = first_object.text
+        author = first_object.author
+        self.assertEqual(text, PostURLTest.post.text)
+        self.assertEqual(author, PostURLTest.post.author)
 
     def test_post_not_in_group_list(self):
         """Тестовый пост не попал на другую группу."""
@@ -86,12 +83,9 @@ class PostURLTest(TestCase):
             'posts:group_list',
             kwargs={'slug': 'test-slug2'}
         ))
-        i = 0
-        for i in range(len(response.context['page_obj'])):
-            first_object = response.context['page_obj'][i]
-            text = first_object.text
-            if text == PostURLTest.post.text:
-                self.assertEqual(text, PostURLTest.post.text)
+        first_object = response.context['page_obj'][0]
+        text = first_object.text
+        self.assertNotEqual(text, PostURLTest.post.text)
 
     def test_comment_in_detail(self):
         """Тестовый комментарий попал на detail."""
@@ -99,9 +93,6 @@ class PostURLTest(TestCase):
             'posts:post_detail',
             kwargs={'post_id': '1'}
         ))
-        i = 0
-        for i in range(len(response.context['comments'])):
-            first_object = response.context['comments'][i]
-            text = first_object.text
-            if text == PostURLTest.post.text:
-                self.assertEqual(text, PostURLTest.comment.text)
+        first_object = response.context['comments'][0]
+        text = first_object.text
+        self.assertEqual(text, PostURLTest.comment.text)

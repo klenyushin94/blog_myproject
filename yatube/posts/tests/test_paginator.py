@@ -1,7 +1,6 @@
-from django.test import TestCase, Client
-from django.urls import reverse
 from django.core.cache import cache
-
+from django.test import Client, TestCase
+from django.urls import reverse
 from posts.models import Group, Post, User
 
 COUNT_POSTS = 13
