@@ -1,6 +1,7 @@
-from django.core.cache import cache
-from django.test import Client, TestCase
+from django.test import TestCase, Client
 from django.urls import reverse
+from django.core.cache import cache
+
 from posts.models import Group, Post, User
 
 COUNT_POSTS = 13
@@ -31,7 +32,7 @@ class PaginatorViewsTest(TestCase):
         cls.authorized_author = Client()
         cls.authorized_client.force_login(PaginatorViewsTest.user)
         cls.authorized_author.force_login(PaginatorViewsTest.author)
-
+    
     def setUp(self):
         cache.clear()
 
