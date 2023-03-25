@@ -1,5 +1,6 @@
 from django.test import TestCase, Client
 from django.urls import reverse
+from django.core.cache import cache
 
 from posts.models import Group, Post, User, Comment
 
@@ -42,7 +43,7 @@ class PostURLTest(TestCase):
         cls.authorized_author.force_login(PostURLTest.author)
 
     def setUp(self):
-        pass
+        cache.clear()
 
     def test_post_in_index(self):
         """Тестовый пост попал на страницу index."""
