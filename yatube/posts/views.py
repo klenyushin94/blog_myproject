@@ -40,7 +40,7 @@ def group_posts(request, slug):
 def profile(request, username):
     author = get_object_or_404(User, username=username)
     posts = Post.objects.filter(author=author)
-    count = posts.count()
+    count = author.posts.count()
     page_obj = paginator_my(request, posts)
     following = (
         request.user.is_authenticated
@@ -59,7 +59,7 @@ def profile(request, username):
 
 def post_detail(request, post_id):
     individual_post = get_object_or_404(Post, id=post_id)
-    comments = Comment.objects.filter(post_id=post_id)
+    comments = individual_post.comments.all()
     form = CommentForm(request.POST or None)
     context = {
         'individual_post': individual_post,
@@ -137,8 +137,8 @@ def profile_follow(request, username):
     author = get_object_or_404(User, username=username)
     if request.user != author:
         Follow.objects.get_or_create(
-            user_id=request.user.id,
-            author_id=author.pk,
+            user=request.user,
+            author=author,
         )
         return redirect('posts:profile', author)
     return redirect('posts:profile', author)

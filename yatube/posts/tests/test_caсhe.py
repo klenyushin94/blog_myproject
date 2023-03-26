@@ -44,9 +44,12 @@ class PostURLTest(TestCase):
     def setUp(self):
         cache.clear()
 
-    def test_cash(self):
+    def test_cache(self):
         """Проверка работы кэша через удаление поста"""
-        response = self.authorized_author.get(reverse('posts:index'))
-        post_count = len(response.context['page_obj'])
+        response1 = self.authorized_author.get(reverse('posts:index'))
+        post_count = len(response1.context['page_obj'])
         Post.objects.get(id=1).delete()
-        self.assertEqual((len(response.context['page_obj'])), post_count)
+        self.assertEqual((len(response1.context['page_obj'])), post_count)
+        cache.clear()
+        response2 = self.authorized_author.get(reverse('posts:index'))
+        self.assertEqual((len(response2.context['page_obj'])), post_count - 1)

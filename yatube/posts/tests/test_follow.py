@@ -44,7 +44,7 @@ class PostURLTest(TestCase):
         '''Проверка подписки авторизированным пользователем'''
         self.assertFalse(
             Follow.objects.filter(
-                author_id=PostURLTest.author.pk,
+                author=PostURLTest.author,
                 user_id=PostURLTest.user1.pk
             ).exists()
         )
@@ -55,7 +55,7 @@ class PostURLTest(TestCase):
             )),
         self.assertTrue(
             Follow.objects.filter(
-                author_id=PostURLTest.author.pk,
+                author=PostURLTest.author,
                 user_id=PostURLTest.user1.pk
             ).exists()
         )
@@ -63,7 +63,7 @@ class PostURLTest(TestCase):
     def test_unfollowing(self):
         '''Проверка отписки авторизированным пользователем'''
         Follow.objects.create(
-            author_id=PostURLTest.author.pk,
+            author=PostURLTest.author,
             user_id=PostURLTest.user1.pk
         )
         self.authorized_client1.get(
@@ -73,7 +73,7 @@ class PostURLTest(TestCase):
             )),
         self.assertFalse(
             Follow.objects.filter(
-                author_id=PostURLTest.author.pk,
+                author=PostURLTest.author,
                 user_id=PostURLTest.user1.pk
             ).exists()
         )
@@ -81,7 +81,7 @@ class PostURLTest(TestCase):
     def test_post_in_follow_index_follow(self):
         """Тестовый пост автора отображается у подписанного юзера"""
         Follow.objects.create(
-            author_id=PostURLTest.author.pk,
+            author=PostURLTest.author,
             user_id=PostURLTest.user1.pk
         )
         response = self.authorized_client1.get(reverse('posts:follow_index'))
@@ -94,11 +94,11 @@ class PostURLTest(TestCase):
     def test_post_in_follow_index_no_follow(self):
         """Тестовый пост автора не отображается у не подписанного юзера"""
         Follow.objects.create(
-            author_id=PostURLTest.author.pk,
+            author=PostURLTest.author,
             user_id=PostURLTest.user1.pk
         )
         Follow.objects.create(
-            author_id=PostURLTest.author2.pk,
+            author=PostURLTest.author2,
             user_id=PostURLTest.user2.pk
         )
         response = self.authorized_client2.get(reverse('posts:follow_index'))
@@ -117,7 +117,7 @@ class PostURLTest(TestCase):
             )),
         self.assertFalse(
             Follow.objects.filter(
-                author_id=PostURLTest.user1.pk,
+                author=PostURLTest.author,
                 user_id=PostURLTest.user1.pk
             ).exists()
         )

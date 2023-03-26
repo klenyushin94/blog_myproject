@@ -30,7 +30,6 @@ class PostURLTest(TestCase):
     def setUp(self):
         cache.clear()
 
-# Проверяем доступность публичных адресов гостевой учеткой
     def test_exists_at_desired_location(self):
         """Проверка страниц, доступных гостю"""
         templates_url_names = {
@@ -44,11 +43,8 @@ class PostURLTest(TestCase):
                 response = self.guest_client.get(address)
                 self.assertEqual(response.status_code, status)
 
-# Проверяем редиректы приватных адресов
-# гостевой учеткой (корректность редиректа тоже проверяем)
     def test_redirect_exists_at_desired_location(self):
         """Проверка страниц, с которых перенаправляют гостя на login"""
-        # Шаблоны по адресам
         templates_url_names = {
             '/create/': HTTPStatus.FOUND,
             '/posts/1/edit/': HTTPStatus.FOUND,
@@ -78,7 +74,6 @@ class PostURLTest(TestCase):
             response, f"{login_url}?next=/posts/1/edit/"
         )
 
-# Проверяем доступность приватных адресов залогиненной учеткой
     def test_create_url_exists_at_desired_location_autorized(self):
         """Страница /create/ доступна авторизованному пользователю."""
         response = self.authorized_client.get('/create/')
@@ -89,10 +84,8 @@ class PostURLTest(TestCase):
         response = self.authorized_author.get('/posts/1/edit/')
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
-# Проверяем соответствие шаблонов для публичных адресов
     def test_urls_uses_correct_template_publi(self):
         """Публичный URL-адрес использует соответствующий шаблон."""
-        # Шаблоны по адресам
         templates_url_names = {
             'posts/index.html': '/',
             'posts/group_list.html': '/group/test-slug/',
@@ -104,8 +97,6 @@ class PostURLTest(TestCase):
                 response = self.guest_client.get(address)
                 self.assertTemplateUsed(response, template)
 
-# Проверяем соответствие шаблонов для приватных адресов
-# (прикрутить subTest не получилось, пусть будет так)
     def test_create_url_uses_correct_template(self):
         """Страница по адресу /create/ использует
         шаблон posts/create_post.html. для авториз. пользователя."""
@@ -118,8 +109,6 @@ class PostURLTest(TestCase):
         response = self.authorized_client.get('/create/')
         self.assertTemplateUsed(response, 'posts/create_post.html')
 
-# Проверяем доступность страницы редактирования поста
-# из под другой учетной записи
     def test_edit_url_exists_at_desired_location(self):
         """Страница /posts/<post_id>/edit/ не доступна неавтору поста."""
         response = self.authorized_client.get('/posts/1/edit/')
@@ -134,14 +123,11 @@ class PostURLTest(TestCase):
             response, '/posts/1/'
         )
 
-# Проверяем несуществующую страницу
     def test_unexisting_page_url_exists_at_desired_location(self):
         """Несуществующая страница не откроется (404)"""
         response = self.guest_client.get('/unexisting_page/')
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
-    # Проверяем недоступность комментирования
-    # незаригестрированным пользователем
     def test_comments_no_authorized(self):
         """Страница /posts/<post_id>/comment/ не доступна гостю."""
         response = self.guest_client.get('/posts/1/comment/')
