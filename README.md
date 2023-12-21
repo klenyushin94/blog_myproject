@@ -1,4 +1,4 @@
-# hw05_final
+# Микроблог
 
 ### **Описание**
 Социальная сеть блогеров.
@@ -24,7 +24,7 @@ git clone https://github.com/klenyushin94/blog_myproject.git
 ```
 
 ```
-cd hw05_final
+cd blog_myproject
 ```
 
 2. Установите и активируйте виртуальное окружение
@@ -75,4 +75,4 @@ python manage.py runserver
 
 ### Об авторе:
     
-    Кленюшин Михаил Юрьевич
+    Кленюшин Михаил Юрьевич ТГ: @klenyushin94
